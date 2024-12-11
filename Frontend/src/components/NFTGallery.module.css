@@ -1,0 +1,21 @@
+/* NFTGallery.module.css */
+.nftGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .nftItem {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .nftItem img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
