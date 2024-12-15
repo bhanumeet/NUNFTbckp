@@ -11,15 +11,77 @@ import {
   Button,
   TextField,
   CircularProgress,
+  styled,
 } from "@mui/material";
+import { ButtonProps } from "@mui/material/Button";
 import { INFT } from "../interfaces/INFT";
 
 import TokenABI from "../abi/Token.abi.json";
 import MarketplaceABI from "../abi/Marketplace.abi.json";
-const COLLECTION_CONTRACT_ADDRESS =
-  "0x53a70FFd8A76Bb50Dc018AdF84a6A96D3Da54Cb2";
-const MARKETPLACE_CONTRACT_ADDRESS =
-  "0xB142ca65005610D3dA999313552BFCe13B320EA2";
+
+const COLLECTION_CONTRACT_ADDRESS = "0x53a70FFd8A76Bb50Dc018AdF84a6A96D3Da54Cb2";
+const MARKETPLACE_CONTRACT_ADDRESS = "0xB142ca65005610D3dA999313552BFCe13B320EA2";
+
+// Styled Components
+const StyledCard = styled(Card)({
+  backgroundColor: "#2a2a2a",
+  color: "#fff",
+  borderRadius: "16px",
+  transition: "transform 0.2s ease-in-out",
+  "&:hover": {
+    transform: "scale(1.02)",
+  },
+});
+
+const StyledCardContent = styled(CardContent)({
+  backgroundColor: "#2a2a2a",
+});
+
+const CustomButton = styled(Button)<ButtonProps>({
+  background: "linear-gradient(45deg, #6a11cb, #2575fc)",
+  color: "#fff",
+  borderRadius: "20px",
+  padding: "10px 20px",
+  fontWeight: "bold",
+  textTransform: "none",
+  width: "100%",
+  marginTop: "16px",
+  "&:hover": {
+    background: "linear-gradient(45deg, #2575fc, #6a11cb)",
+    transform: "scale(1.05)",
+    transition: "transform 0.2s ease-in-out",
+  },
+});
+
+const StyledPaper = styled(Paper)({
+  backgroundColor: "#1e1e1e",
+  color: "#fff",
+  padding: "2rem",
+  borderRadius: "20px",
+});
+
+const StyledTextField = styled(TextField)({
+  "& .MuiOutlinedInput-root": {
+    color: "#fff",
+    "& fieldset": {
+      borderColor: "#fff",
+    },
+    "&:hover fieldset": {
+      borderColor: "#aaa",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#fff",
+    },
+  },
+  "& .MuiInputLabel-root": {
+    color: "#fff",
+    fontFamily: "Roboto, sans-serif",
+  },
+  "& .MuiInput-input": {
+    color: "#fff",
+    fontFamily: "Roboto, sans-serif",
+  },
+});
 
 const OwnedNFTs2 = () => {
   const [nfts, setNfts] = useState<INFT[]>([]);
@@ -56,7 +118,7 @@ const OwnedNFTs2 = () => {
                 image: metadata.image.startsWith("ipfs://")
                   ? `https://ipfs.io/ipfs/${metadata.image.substring(7)}`
                   : metadata.image,
-                price: "", // Initialize the price as an empty string for each NFT
+                price: "",
               };
             } catch (error) {
               console.error("Error fetching metadata:", error);
@@ -90,7 +152,7 @@ const OwnedNFTs2 = () => {
       return;
     }
 
-    setIsProcessing(true); // Start the loading indicator before initiating the transaction
+    setIsProcessing(true);
 
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
@@ -106,33 +168,30 @@ const OwnedNFTs2 = () => {
     );
 
     try {
-      // Notify user about the transaction being sent
       const approvalTx = await nftContract.approve(
         MARKETPLACE_CONTRACT_ADDRESS,
         tokenId
       );
-      await approvalTx.wait(); // Wait for the transaction to be mined
+      await approvalTx.wait();
 
       const listTx = await marketplaceContract.listNFT(
         COLLECTION_CONTRACT_ADDRESS,
         tokenId,
         ethers.parseEther(price)
       );
-      setIsProcessing(false); // Stop the loading indicator after the transaction completes
-      await listTx.wait(); // Wait for the listing transaction to be mined
-      setIsProcessing(true); // Stop the loading indicator after the transaction completes
+      await listTx.wait();
 
       alert("NFT listed on the marketplace successfully!");
     } catch (error) {
       console.error("Error during the listing process:", error);
       alert("Failed to list NFT on the marketplace. See console for details.");
     } finally {
-      setIsProcessing(false); // Stop the loading indicator after the transaction completes
+      setIsProcessing(false);
     }
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 2, position: "relative" }}>
+    <StyledPaper elevation={3} sx={{ position: "relative" }}>
       {isProcessing && (
         <Box
           sx={{
@@ -144,67 +203,79 @@ const OwnedNFTs2 = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
             zIndex: 2,
+            borderRadius: "20px",
           }}
         >
-          <CircularProgress />
+          <CircularProgress sx={{ color: "#6a11cb" }} />
         </Box>
       )}
 
-      <Typography variant="h5" sx={{ mb: 2 }}>
+      <Typography
+        variant="h4"
+        sx={{ mb: 4, fontFamily: "Roboto, sans-serif", textAlign: "center" }}
+      >
         My NFT Collection
       </Typography>
-      <Grid container spacing={2}>
+      
+      <Grid container spacing={3}>
         {loading ? (
-          <Typography>Loading NFTs...</Typography>
+          <Box sx={{ width: "100%", textAlign: "center", mt: 4 }}>
+            <CircularProgress sx={{ color: "#6a11cb" }} />
+          </Box>
         ) : nfts.length > 0 ? (
           nfts.map((nft) => (
             <Grid item key={nft.tokenId} xs={12} sm={6} md={4}>
-              <Card>
+              <StyledCard>
                 <CardMedia
                   component="img"
-                  height="140"
+                  height="280"
                   image={nft.image}
                   alt={nft.name}
+                  sx={{ objectFit: "cover" }}
                 />
-                <CardContent>
-                  <Typography gutterBottom variant="h6">
+                <StyledCardContent>
+                  <Typography
+                    gutterBottom
+                    variant="h6"
+                    sx={{ fontFamily: "Roboto, sans-serif" }}
+                  >
                     {nft.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "#ccc", mb: 2, fontFamily: "Roboto, sans-serif" }}
+                  >
                     {nft.description}
                   </Typography>
-                  <TextField
+                  <StyledTextField
                     label="Price in ETH"
                     type="number"
                     fullWidth
                     variant="outlined"
                     value={nft.price}
-                    onChange={(e) =>
-                      handlePriceChange(nft.tokenId, e.target.value)
-                    }
+                    onChange={(e) => handlePriceChange(nft.tokenId, e.target.value)}
                     margin="dense"
                   />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() =>
-                      handleSellOnMarketplace(nft.tokenId, nft.price)
-                    }
-                    style={{ marginTop: 8 }}
+                  <CustomButton
+                    onClick={() => handleSellOnMarketplace(nft.tokenId, nft.price)}
                   >
                     Sell on Marketplace
-                  </Button>
-                </CardContent>
-              </Card>
+                  </CustomButton>
+                </StyledCardContent>
+              </StyledCard>
             </Grid>
           ))
         ) : (
-          <Typography>No NFTs found in your wallet.</Typography>
+          <Box sx={{ width: "100%", textAlign: "center", mt: 4 }}>
+            <Typography sx={{ color: "#ccc", fontFamily: "Roboto, sans-serif" }}>
+              No NFTs found in your wallet.
+            </Typography>
+          </Box>
         )}
       </Grid>
-    </Paper>
+    </StyledPaper>
   );
 };
 

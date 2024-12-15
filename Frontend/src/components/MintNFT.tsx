@@ -12,6 +12,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { IMetadata } from "../interfaces/IMetadata";
+import { ButtonProps } from "@mui/material/Button";
 
 import TokenABI from "../abi/Token.abi.json";
 const TOKEN_CONTRACT_ADDRESS = "0x53a70FFd8A76Bb50Dc018AdF84a6A96D3Da54Cb2";
@@ -26,6 +27,23 @@ const VisuallyHiddenInput = styled("input")({
   left: 0,
   whiteSpace: "nowrap",
   width: 1,
+});
+
+const CustomButton = styled(Button)<ButtonProps>({
+  background: "linear-gradient(45deg, #6a11cb, #2575fc)", // Cool gradient
+  color: "#fff",
+  borderRadius: "20px",
+  width: "fit-content", // Adjusts width to fit the content
+  padding: "10px 20px", // Add padding for a nice shape
+  display: "block", // Centering will require block display
+  margin: "0 auto", // Center the button horizontally
+  fontWeight: "bold", // Enhance text style
+  textTransform: "none", // Disable uppercase text
+  "&:hover": {
+    background: "linear-gradient(45deg, #2575fc, #6a11cb)", // Reverse gradient on hover
+    transform: "scale(1.05)", // Slight zoom effect
+    transition: "transform 0.2s ease-in-out",
+  },
 });
 
 const MintNFT: React.FC = () => {
@@ -220,7 +238,14 @@ const MintNFT: React.FC = () => {
   };
 
   return (
-    <Paper>
+    <Paper
+      sx={{
+        backgroundColor: "#1e1e1e",
+        color: "#fff",
+        padding: "2rem",
+        borderRadius: "20px",
+      }}
+    >
       {isLoading ? (
         <Box justifyContent={"center"}>
           <CircularProgress />
@@ -229,19 +254,22 @@ const MintNFT: React.FC = () => {
         <Box
           display={"flex"}
           flexDirection={"column"}
-          rowGap={1}
-          padding={2}
+          rowGap={2}
           component={"form"}
           onSubmit={handleSubmission}
+          sx={{ textAlign: "center" }}
         >
-          <Typography variant="h4">Mint NFT</Typography>
+          <Typography variant="h4" sx={{ fontFamily: "Roboto, sans-serif" }}>
+            Mint NFT
+          </Typography>
 
-          <Button
+          <CustomButton
             component="label"
             role={undefined}
             variant="contained"
             tabIndex={-1}
             startIcon={<CloudUploadIcon />}
+            sx={{ borderRadius: "20px" }}
           >
             Upload file
             <VisuallyHiddenInput
@@ -249,19 +277,38 @@ const MintNFT: React.FC = () => {
               accept="image/png, image/gif, image/jpeg"
               onChange={handleFile}
             />
-          </Button>
+          </CustomButton>
           {imageUrl && (
             <Box display={"flex"} justifyContent={"center"}>
               <img src={imageUrl} style={{ height: "300px", width: "300px" }} />
             </Box>
           )}
           <TextField
-            label="NFT Name"
-            variant="outlined"
-            value={NFTName}
-            onChange={handleNFTNameChange}
-            required
-          />
+              label="NFT Name"
+              variant="outlined"
+              value={NFTName}
+              onChange={handleNFTNameChange}
+              required
+              InputLabelProps={{
+                style: { color: "#fff", fontFamily: "Roboto, sans-serif" }, // Label color
+              }}
+              InputProps={{
+                style: { color: "#fff", fontFamily: "Roboto, sans-serif" }, // Text color
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#fff", // Border color
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#aaa", // Hover border color
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#fff", // Focused border color
+                  },
+                },
+              }}
+/>
           <TextField
             label="NFT Description"
             variant="outlined"
@@ -270,7 +317,27 @@ const MintNFT: React.FC = () => {
             onChange={handleNFTDescChange}
             minRows={2}
             required
+            InputLabelProps={{
+              style: { color: "#fff", fontFamily: "Roboto, sans-serif" }, // Label color
+            }}
+            InputProps={{
+              style: { color: "#fff", fontFamily: "Roboto, sans-serif" }, // Text color
+            }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#fff", // Border color
+                },
+                "&:hover fieldset": {
+                  borderColor: "#aaa", // Hover border color
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#fff", // Focused border color
+                },
+              },
+            }}
           />
+
           {/* <TextField
             label="NFT Value"
             placeholder="0.01ETH"
@@ -278,9 +345,9 @@ const MintNFT: React.FC = () => {
             onChange={handleNFTValueChange}
             required
           /> */}
-          <Button variant="contained" type="submit">
+          <CustomButton variant="contained" type="submit" sx={{ borderRadius: "20px" }}>
             MINT NFT
-          </Button>
+          </CustomButton>
         </Box>
       )}
     </Paper>
