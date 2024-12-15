@@ -3,7 +3,8 @@ import NFTGallery from "./components/NFTGallery";
 import { WagmiWrapper } from "./components/WagmiWrapper";
 import { MintNFT } from "./components/MintNFT";
 import OwnedNFTs from "./components/OwnedNFTs";
-//import Auction from "./components/Auction";
+import AuctionPage from "./components/AuctionPage";
+//import Converter from "./components/Converter";
 
 const App: React.FC = () => {
   return (
@@ -13,7 +14,8 @@ const App: React.FC = () => {
           <MintNFT />
           <OwnedNFTs />
           <NFTGallery />
-          {/* <Auction /> */}
+          {/* <Converter /> */}
+          <AuctionPage />
         </WagmiWrapper>
       </Container>
     </div>

@@ -28,6 +28,19 @@ const InfoBox = styled(Paper)({
   height: "100%",
 });
 
+// Styled Big Info Box
+const BigInfoBox = styled(Paper)({
+  backgroundColor: "#1e1e1e",
+  color: "#fff",
+  borderRadius: "20px",
+  padding: "2rem",
+  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.3)",
+  textAlign: "center",
+  width: "94%",
+  marginBottom: "2rem", // Add space below the big box
+  marginTop: "10rem",
+});
+
 // Bounce Animation for Arrow
 const bounce = keyframes`
   0%, 20%, 50%, 80%, 100% {
@@ -52,7 +65,6 @@ const ScrollDownBox = styled(Box)({
   animation: `${bounce} 2s infinite`,
 });
 
-
 export function Account() {
   const { address } = useAccount();
   const { disconnect } = useDisconnect();
@@ -65,11 +77,31 @@ export function Account() {
         color: "#fff",
         fontFamily: "Roboto, sans-serif",
         display: "flex",
+        flexDirection: "column", // Ensure everything stacks vertically
         alignItems: "center",
-        position: "relative",
       }}
     >
       <Container maxWidth="lg">
+        {/* Big Box: Project Info */}
+        <BigInfoBox>
+          <Typography
+            variant="h4"
+            sx={{ mb: 2, fontWeight: "bold", fontFamily: "Roboto, sans-serif" }}
+          >
+            🚀 Welcome to HuskyTVNft
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{ fontSize: "1.2rem", lineHeight: "1.8", marginBottom: "1rem" }}
+          >
+            YouTube creators and streamers rely on ad revenue and brand
+            integrations for income. With <strong>HuskyTVNft</strong>, they unlock a
+            third revenue stream! 🎉 Creators can sell their videos and video
+            thumbnails from trending content as NFTs. Empower your favorite
+            creators and own a piece of internet history! 🌟
+          </Typography>
+        </BigInfoBox>
+
         <Grid
           container
           spacing={4}
@@ -171,10 +203,10 @@ export function Account() {
       {/* Scroll Down Section */}
       <ScrollDownBox>
         <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-        Scroll Down
+          Scroll Down
         </Typography>
         <Box component="span" sx={{ fontSize: "2rem" }}>
-        ⬇️
+          ⬇️
         </Box>
       </ScrollDownBox>
     </Box>
