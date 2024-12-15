@@ -1,5 +1,5 @@
 import { useConnect } from "wagmi";
-import { Box, Button, Typography, Paper, styled, Container } from "@mui/material";
+import { Box, Button, Typography, Paper, styled } from "@mui/material";
 
 // Styled Paper for Wallet Box
 const WalletBox = styled(Paper)({
